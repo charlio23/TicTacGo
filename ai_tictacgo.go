@@ -47,7 +47,7 @@ func (e Ai) MinMax(alpha int, beta int, node Node, level int) Node {
 			result.Node(e, math.MinInt64)
 			return result
 		} else { //player
-			result.Node(e, math.MaxUint64)
+			result.Node(e, math.MaxInt64)
 			return result
 		}
 	} else if level == level_Max {
