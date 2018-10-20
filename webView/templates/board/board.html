@@ -35,6 +35,23 @@
 
       <main role="main" class="inner cover">
         <h1 class="cover-heading">Tic Tac Go!</h1>
+        <table class="third" id="board">
+        	<tr>
+        		<td id ="0"></td>
+        		<td id ="1"></td>
+        		<td id ="2"></td>
+        	</tr>
+        	<tr>
+        		<td id ="3"></td>
+        		<td id ="4"></td>
+        		<td id ="5"></td>
+        	</tr>
+        	<tr>
+        		<td id ="6"></td>
+        		<td id ="7"></td>
+        		<td id ="8"></td>
+        	</tr>
+        </table>
         <p class="lead first" >Enjoy a tic tac toe game against an AI developed with golang!</p>
         <p class="lead first">
           <button id="start" href="#" class="btn btn-lg btn-secondary" onclick="startGame()">Get started!</button>
@@ -61,18 +78,46 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   	<script>
+  		var board = ["0","1","2","3","4","5","6","7","8"]
   		function startFirst(){
-
+  			$(".second").hide();
+  			$(".third").show()
   		}
 
   		function letAIStart(){
+  			$(".second").hide();
+  			$(".third").show();
+  			var i = Math.floor((Math.random() * 8) + 1);
+  			if (board[i] != "O" && board[i] != "X") {
+  				$("#" + i).text("X")
+  				board[i] = "X"
+  			}
+  		}
 
+  		function nextAI(){
+  			i = Math.floor((Math.random() * 8) + 1)
+  			while(board[i] == "X" || board[i] == "O") {
+  				i = Math.floor((Math.random() * 8) + 1)
+  			}
+  			$("#" + i).text("X")
+  			board[i] = "X"
   		}
 
   		function startGame() {
   			$(".first" ).hide();
   			$(".second").show();
+
   		}
+
+  		$("td").click(function(){
+	  			var i = $(this).attr("id")
+	  			if (board[i] != "O" && board[i] != "X") {
+	  				$(this).text("O")
+	  				board[i] = "O"
+	  			}
+	  			nextAI()
+  			});
+
 		$( document ).ready(function() {
     		console.log( "ready!" );
 		});
