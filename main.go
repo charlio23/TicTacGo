@@ -38,10 +38,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	//port := os.Getenv("PORT")
+	port := os.Getenv("PORT")
 	router := mux.NewRouter()
 	router.HandleFunc("/nextMove/{value}", index).Methods("GET")
-	log.Fatal(http.ListenAndServe(":2000", handlers.CORS()(router)))
-	//var origBoard [9]string = [9]string{"0", "1", "2", "3", "4", "5", "6", "7", "8"}
-	//fmt.Println(callAi(origBoard))
+	log.Fatal(http.ListenAndServe(":"+port, handlers.CORS()(router)))
 }
