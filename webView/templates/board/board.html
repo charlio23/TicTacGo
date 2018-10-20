@@ -12,6 +12,9 @@
     <title>Tic Tac Go!</title>
 
     <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet"> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	
@@ -26,31 +29,32 @@
         <div class="inner">
           <h3 class="masthead-brand">TicTacGo!</h3>
           <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link active" href="#">Home</a>
-            <a class="nav-link" href="#">Features</a>
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link active" href="/">Restart <i class="w3-spin fa fa-refresh"></i></a>
+            <a class="nav-link" href="https://github.com/charlio23/TicTacGo">Source <i class="fab fa-github"></i></a>
           </nav>
         </div>
       </header>
 
       <main role="main" class="inner cover">
-        <h1 class="cover-heading">Tic Tac Go!</h1>
+        <h1 class="title cover-heading">Tic Tac Go!</h1>
+        <p class="end">Click <a href="/"><b>Restart</b></a> to play again.</p>
         <table class="third" id="board">
+        	<tbody>
         	<tr>
-        		<td id ="0"></td>
-        		<td id ="1"></td>
-        		<td id ="2"></td>
+        		<td valign="middle" id ="0"></td>
+        		<td valign="middle" id ="1"></td>
+        		<td valign="middle" id ="2"></td>
         	</tr>
         	<tr>
-        		<td id ="3"></td>
-        		<td id ="4"></td>
-        		<td id ="5"></td>
+        		<td valign="middle" id ="3"></td>
+        		<td valign="middle" id ="4"></td>
+        		<td valign="middle" id ="5"></td>
         	</tr>
         	<tr>
-        		<td id ="6"></td>
-        		<td id ="7"></td>
-        		<td id ="8"></td>
-        	</tr>
+        		<td valign="middle" id ="6"></td>
+        		<td valign="middle" id ="7"></td>
+        		<td valign="middle" id ="8"></td>
+        	</tr></tbody>
         </table>
         <p class="lead first" >Enjoy a tic tac toe game against an AI developed with golang!</p>
         <p class="lead first">
@@ -58,14 +62,15 @@
         </p>
         <p class="lead second" >Please select wether you want to start first or let the AI start.</p>
         <p class="lead second">
-          <button  href="#" class="btn btn-lg btn-secondary" onclick="startFirst()">Start first</button>
-          <button  href="#" class="btn btn-lg btn-secondary" onclick="letAIStart()">Let AI start</button>
+          <button  href="#" class="btn btn-lg btn-secondary" style="margin-right: 10px;" onclick="startFirst()">Start first <br><i class="fas fa-diagnoses"></i>
+</button>
+          <button  href="#" class="btn btn-lg btn-secondary" style="margin-left: 10px;" onclick="letAIStart()">Let AI start <br><i class="fas fa-robot"></i></button>
         </p>
       </main>
 
       <footer class="mastfoot mt-auto">
         <div class="inner">
-          <p class="love">Made <i class="icon ion-heart"></i> by Joan & Carles</p>
+          <p class="love">Made with <i class="fa fa-heart" style="color:salmon;"></i> by Joan & Carles</p>
         </div>
       </footer>
     </div>
@@ -78,49 +83,108 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   	<script>
-  		URI = "http://localhost:2000"
+  		URI = "https://glacial-tor-78412.herokuapp.com/nextMove/";
+  		function drawWinningLine({ direction, row }) {
+		    let board = document.getElementById("board");
+		    board.className = `${direction}${row}`;
+		    setTimeout(() => { board.className += ' full'; }, 50);
+		}
   		String.prototype.replaceAll = function(search, replacement) {
     		var target = this;
     		return target.replace(new RegExp(search, 'g'), replacement);
 		};
   		var board = ["0","1","2","3","4","5","6","7","8"]
+  		var count = 9;
+  		var turn = true;
+
+  		function winning(player){
+			if (
+			 (board[0] == player && board[1] == player && board[2] == player) ||
+			 (board[3] == player && board[4] == player && board[5] == player) ||
+			 (board[6] == player && board[7] == player && board[8] == player) ||
+			 (board[0] == player && board[3] == player && board[6] == player) ||
+			 (board[1] == player && board[4] == player && board[7] == player) ||
+			 (board[2] == player && board[5] == player && board[8] == player) ||
+			 (board[0] == player && board[4] == player && board[8] == player) ||
+			 (board[2] == player && board[4] == player && board[6] == player)
+			) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function endGame(message){
+			$(".title").text(message);
+			$(".end").show("highlight");
+		}
+
   		function startFirst(){
   			$(".second").hide();
-  			$(".third").show()
+  			$(".third").show();
+  			turn = true;
   		}
 
   		function letAIStart(){
   			$(".second").hide();
   			$(".third").show();
-  			nextAI()
+  			turn = false;
+  			nextAI();
   		}
 
   		function nextAI(){
   			var q = board.toString().replaceAll(",","")
-  			$.getJSON(URI + "/nextMove/" + q,function(data) {
+  			$.getJSON(URI + q,function(data) {
 	    		for (var i = 0; i < 9; ++i){
 	    			if (board[i] != data[i]) {
 	    				board[i] = data[i];
 	    				$("#" + i).text(board[i]);
 	    			}
 	    		}
+	    		if (winning("X")) {
+					$("td").click(false)
+	  				endGame("Oh, You Lost!")
+					return
+				}
+	  			turn = true;
+	  			--count;
+	  			if (count == 0) {
+	  				$("td").click(false)
+	  				endGame("It's a Draw!")
+	  				return;
+	  			}
 			});
-
   		}
 
   		function startGame() {
   			$(".first" ).hide();
-  			$(".second").show();
+  			$(".second").show("scale");
 
   		}
 
   		$("td").click(function(){
-	  			var i = $(this).attr("id")
-	  			if (board[i] != "O" && board[i] != "X") {
-	  				$(this).text("O")
-	  				board[i] = "O"
-	  			}
-	  			nextAI()
+  			if (!turn) return;
+  			var i = $(this).attr("id");
+  			if (board[i] == "O" || board[i] == "X") {
+  				console.log("nop");
+  				return;
+  			}
+  			console.log("hello");
+  			$(this).text("O");
+  			board[i] = "O";
+  			turn = false;
+  			if (winning("O")) {
+				$("td").click(false)
+  				endGame("Congrats, You Won!")
+				return;
+			}
+  			--count;
+  			if (count == 0) {
+  				$("td").click(false)
+  				endGame("It's a Draw!");
+  				return;
+  			}
+  			nextAI();
   		});
 	</script>
   </body>

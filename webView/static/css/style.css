@@ -42,6 +42,9 @@ body {
   max-width: 42em;
 }
 
+.title {
+  margin-bottom: 1.5rem;
+}
 
 /*
  * Header
@@ -114,17 +117,36 @@ body {
 }
 
 table {
-  width: 100%;
+  width: 60%;
+  height: 60%;
   border-collapse: collapse;
+  margin-right: 20%;
+  margin-left: 20%;
+  vertical-align: middle;
+  font-family: 'Indie Flower', cursive;
+  font-size: 75px;
 }
+@media only screen and (max-device-width : 640px) {
+  table {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 10%;
+    height: 90%;
+    border-collapse: collapse;
+    vertical-align: middle;
+  }
+}
+
 td {
   width: 33.333%;
+  height: 120px;
   border: 6px solid #fff;
+  vertical-align: middle;
 }
 td::after {
   content: '';
   display: block;
-  margin-top: 100%;
+  vertical-align: middle;
 }
 
 td:first-of-type {
@@ -142,3 +164,6 @@ tr:nth-of-type(3) td {
   border-bottom-color: transparent;
 }
 
+.end {
+  display:none;
+}
