@@ -1,1 +1,1 @@
-web: gunicorn webView.wsgi
+web: gunicorn --chdir webView --log-file - webView.wsgi:application

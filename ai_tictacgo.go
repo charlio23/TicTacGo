@@ -1,16 +1,16 @@
 package main
 
-import "strconv"
-
-var origBoard = {0,1,2,3,4,5,6,7,8}
+import (
+	"strconv"
+)
 
 // human
-var huPlayer = "O";
+var huPlayer string = "O"
 
 // ai
-var aiPlayer = "X";
+var aiPlayer string = "X"
 
-func win(board []string, player string) bool {
+func win(board [9]string, player string) bool {
 
 	if (board[0] == player && board[1] == player && board[2] == player) ||
 		(board[3] == player && board[4] == player && board[5] == player) ||
@@ -26,124 +26,87 @@ func win(board []string, player string) bool {
 	}
 }
 
-func filter(board []string, aux [] string, value int) [] string{
-	if board==nil{
+func filter(board [9]string, aux []string, value int) []string {
+	if value < 0 {
 		return aux
-	}else{
-		i := append(aux,board[value])
-		filter(board,i,value-1)
-	}
-	return nil
-}
-
-func choose(ss []string, test func(string) bool) (ret []string) {
-	for _, s := range ss {
-		if test(s) {
-			ret = append(ret, s)
+	} else {
+		if board[value] == "X" || board[value] == "O" {
+			aux = filter(board, aux, value-1)
+		} else {
+			i := append(aux, board[value])
+			aux = filter(board, i, value-1)
 		}
 	}
-	return
+	return aux
 }
 
-func emptyIndexies(board []string) []string{
-	var aux []string
-	return filter(board, aux, len(board))
+func emptyIndexes(board [9]string) []string {
+	aux := make([]string, 0)
+	return filter(board, aux, len(board)-1)
 }
 
-func heuristica(board []string, availSpots []string)int{
-	if (win(board, huPlayer)){
-		return -10
-	} else if (win(board, aiPlayer)){
-		return 10
-	} else if (len(availSpots) == 0){
-		return 0
-	}
-}
-
-type Move struct{
+type Move struct {
 	score int
 	index string
 }
 
-func movement (availSpots []string, player string, newBoard []string){
-	var moves = {}
-	var i int
-	i=0
-	// loop through available spots
-	for (i < len(availSpots)){
-		//create an object for each and store the index of that spot
-		var move Move
-		var j int = i
+func MinMax(board [9]string, player string) Move {
+	var move Move
+	var availSpots []string = emptyIndexes(board)
 
-		move.index = newBoard[strconv.Atoi(availSpots.[i])]
-
-		// set the empty spot to the current player
-		newBoard[availSpots[i]] = player;
-
-		/*collect the score resulted from calling minimax
-		  on the opponent of the current player*/
-		if (player == aiPlayer){
-			var result = MinMax(newBoard, huPlayer);
-			move.score = result.score;
-		}
-		else{
-			var result = MinMax(newBoard, aiPlayer);
-			move.score = result.score;
-		}
-
-		// reset the spot to empty
-		newBoard[availSpots[i]] = move.index;
-
-		// push the object to the array
-		append(move,moves);
-	i++;
+	if win(board, huPlayer) {
+		move.score = -10
+		return move
+	} else if win(board, aiPlayer) {
+		move.score = 10
+		return move
+	} else if len(availSpots) == 0 {
+		move.score = 0
+		return move
 	}
-}
+	var moves []Move
 
-func MinMax(board []string, player string) Move{
-	var availSpots = emptyIndexies(board)
-
-	var heur = heuristica(board,availSpots)
-
-	movement(availSpots,player,board)
-	/*var result Node
-	var value int
-	var next []string
-	var aux Node
-
-	if finalNode(node) {
-		if (level % 2) == 0 { //machine
-			result.Node(e, math.MinInt64)
-			return result
-		} else { //player
-			result.Node(e, math.MaxInt64)
-			return result
+	for i := 0; i < len(availSpots); i++ {
+		var aux Move
+		j, _ := strconv.Atoi(availSpots[i])
+		aux.index = board[j]
+		board[j] = player
+		if player == aiPlayer {
+			result := MinMax(board, huPlayer)
+			aux.score = result.score
+		} else {
+			result := MinMax(board, aiPlayer)
+			aux.score = result.score
 		}
-	} else if level == level_Max {
-		value = heuristica(e, level)
-		result.Node(e, value)
-		return result
-	} else {
-		i:= len(e.ToeBoard)
-		for alpha < beta && i>0 {
-			next = emptyIndexies(e)
-			aux = next.node.MinMax(alpha, beta, next, level+1)
-			if (level % 2) == 0 {
-				if result.heuristic > alpha {
-					alpha = result.heuristic
-					result.node = aux.node
-				}
-			} else {
-				if result.heuristic < beta {
-					beta = result.heuristic
-					result.node = aux.node
-				}
+
+		board[j] = aux.index
+		moves = append(moves, aux)
+	}
+
+	var bestMove int
+
+	if player == aiPlayer {
+		bestScore := -10000
+		for i := 0; i < len(moves); i++ {
+			if moves[i].score > bestScore {
+				bestScore = moves[i].score
+				bestMove = i
 			}
 		}
-
-		return result*/
-
-
-		return 0
+	} else {
+		bestScore := 10000
+		for i := 0; i < len(moves); i++ {
+			if moves[i].score < bestScore {
+				bestScore = moves[i].score
+				bestMove = i
+			}
 		}
+	}
 
+	return moves[bestMove]
+}
+
+func callAi(board [9]string) string {
+
+	return MinMax(board, aiPlayer).index
+}
