@@ -1,0 +1,12 @@
+{
+	"ImportPath": "TicTacGo",
+	"GoVersion": "go1.11",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.6.2-9-g9e1f595",
+			"Rev": "9e1f5955c0d22b55d9e20d6faa28589f83b2faca"
+		}
+	]
+}
