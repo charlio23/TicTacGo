@@ -1,6 +1,9 @@
 package main
 
-import "math"
+import (
+	"math"
+	"reflect"
+)
 
 const level_Max int = 9
 
@@ -29,7 +32,7 @@ func heuristica(e Ai, level int) int {
 }
 
 func finalNode(nodeToAvaluate Node) bool {
-	return false
+	return reflect.DeepEqual(Node{}, nodeToAvaluate)
 }
 
 func nextNode(nodeToAvaluate Node) Node {
